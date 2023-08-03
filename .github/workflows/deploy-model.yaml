@@ -1,0 +1,85 @@
+name: deploy-model
+
+on:
+  push:
+    tags:
+      - '*'
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_SESSION_TOKEN:  ${{ secrets.AWS_SESSION_TOKEN }}
+  AWS_ROLE: ${{ secrets.AWS_ROLE }}
+
+jobs:
+  get-credentials:
+    name: Get AWS credentials
+    runs-on: ubuntu-latest
+    script:
+    - pip install awscli
+    - >
+      CREDENTIALS=($(aws sts assume-role-with-web-identity
+      --region=us-east-1
+      --role-arn=arn:aws:iam::342840881361:role/SandboxUser
+      --role-session-name=GitLab
+      --duration-seconds=3600
+      --web-identity-token="$CI_JOB_JWT_V2"
+      --query="Credentials.[AccessKeyId,SecretAccessKey,SessionToken]"
+      --output=text))
+    - export AWS_ACCESS_KEY_ID="${CREDENTIALS[0]}"
+    - export AWS_SECRET_ACCESS_KEY="${CREDENTIALS[1]}"
+    - export AWS_SESSION_TOKEN="${CREDENTIALS[2]}"
+    - aws sts get-caller-identity
+    - >
+
+  act:
+    name: Parse model action and deploy model if stage was assigned
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v3
+
+    - name: "Use GTO"
+      id: gto
+      uses: iterative/gto-action@v2
+    
+    - uses: actions/setup-python@v2
+
+    - name: "For version registration action, print the details and then ignore the action."
+      if: steps.gto.outputs.event == 'registration'
+      run: |
+        echo "[$GITHUB_REF]: Version '${{ steps.gto.outputs.version }}' was registered for model '${{ steps.gto.outputs.name }}'. "
+        echo "Since this is not a stage assignment, I am ignoring this!"
+
+    - name: "For stage assignment action, print the details and then proceed to deploy."
+      if: steps.gto.outputs.event == 'assignment'
+      run: |
+        echo "[$GITHUB_REF]: Version '${{ steps.gto.outputs.version }}' of model '${{ steps.gto.outputs.name }}' was promoted to stage '${{ steps.gto.outputs.stage }}'"
+        echo "Since this is a stage assignment, I am going to work on this!"
+
+    - name: "Install packages except dvc"
+      if: steps.gto.outputs.event == 'assignment'
+      run: |
+        pip install --upgrade pip setuptools wheel
+        pip install -r requirements-deploy.txt
+
+    - name: "Install dvc"
+      if: steps.gto.outputs.event == 'assignment'
+      run: |
+        sudo wget https://dvc.org/deb/dvc.list -O /etc/apt/sources.list.d/dvc.list
+        wget -qO - https://dvc.org/deb/iterative.asc | gpg --dearmor > packages.iterative.gpg
+        sudo install -o root -g root -m 644 packages.iterative.gpg /etc/apt/trusted.gpg.d/
+        rm -f packages.iterative.gpg
+        sudo apt update
+        sudo apt install dvc
+
+    - name: "Get model url"
+      if: steps.gto.outputs.event == 'assignment'
+      run: |
+        echo "MODEL_URL=$(dvc get --show-url --rev ${{ github.sha }} https://github.com/tapadipti/smaker output/myfmmodel.tar.gz)" >> "$GITHUB_ENV"
+
+    - name: "Run deployment python script"
+      if: steps.gto.outputs.event == 'assignment'
+      run: |
+        python src/deploy.py ${{ steps.gto.outputs.version }} ${{ steps.gto.outputs.stage }} ${{ env.MODEL_URL }}

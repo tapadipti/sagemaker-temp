@@ -1,0 +1,4 @@
+[core]
+    remote = storage
+['remote "storage"']
+    url = s3://tapa-test-s3/dvc-remote/fm-sm
