@@ -29,28 +29,28 @@ stages:
         train.dropout: 0.4
         train.hidden_units: 64
         train.lr: 0.01
-        train.num_epochs: 11
+        train.num_epochs: 10
     outs:
     - path: dvclive/metrics.json
       hash: md5
-      md5: f931732a6342a4b3743e2b2239758ffe
-      size: 55
+      md5: 6c135398addb261b8f83600adadd9316
+      size: 54
     - path: dvclive/plots/metrics/accuracy.tsv
       hash: md5
-      md5: 4449d8f4828e1fea2068fa1a155fef63
-      size: 244
+      md5: 3d00052a167f2c8fa4f49fc0e5f2a760
+      size: 223
     - path: output/myfmmodel.keras
       hash: md5
-      md5: 1bdac57a6e865f07b81139423e66583a
-      size: 3678611
+      md5: 203ee6f14efee6139ad318c7ff6f72ed
+      size: 3681312
     - path: output/myfmmodel.tar.gz
       hash: md5
-      md5: a3c47ba0760eeca0d370a1a6b9f23ae6
-      size: 3381768
+      md5: c2213ffbcad2fd9aedffa33e2efcf0d4
+      size: 3336332
     - path: output/train_logs.csv
       hash: md5
-      md5: 6cb7e447ce40149bbecba10577ff6879
-      size: 465
+      md5: 727c76a904b38d5bda976df4c88019bd
+      size: 423
   evaluate:
     cmd: python src/evaluate.py
     deps:
@@ -60,8 +60,8 @@ stages:
       size: 54950285
     - path: output/myfmmodel.keras
       hash: md5
-      md5: 1bdac57a6e865f07b81139423e66583a
-      size: 3678611
+      md5: 203ee6f14efee6139ad318c7ff6f72ed
+      size: 3681312
     - path: src/evaluate.py
       hash: md5
       md5: d55658c1947e760905f8784a695033b4
@@ -69,14 +69,14 @@ stages:
     outs:
     - path: output/metrics.json
       hash: md5
-      md5: 4f91376b2b038fd80f5b4370e519f5cf
-      size: 60
+      md5: 7ef92be1be7b231c9368ed38720f33d8
+      size: 59
     - path: output/predictions.json
       hash: md5
-      md5: bfa6d192275379719b32fd8cb2656f18
+      md5: 46e2c3c474a54698aa350027ccefb5e0
       size: 310000
     - path: output/test/samples_of_mispredicted_images/
       hash: md5
-      md5: f5c56a399bdcd280adf8eb4f56014804.dir
-      size: 175592
+      md5: 7f19a312dc3a7fb17c323409fe8c2bb8.dir
+      size: 174415
       nfiles: 10
