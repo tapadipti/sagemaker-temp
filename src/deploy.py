@@ -29,6 +29,18 @@ sagemaker_role= os.environ["AWS_ROLE"]
 framework='tensorflow'
 framework_version = '2.9'
 instance_type = 'ml.t2.medium'
+memory_size = { 
+    'dev': 1024,
+    'staging': 1024,
+    'prod': 2048,
+    'default': 1024,
+    }
+max_concurrency = { 
+    'dev': 5,
+    'staging': 5,
+    'prod': 10,
+    'default': 5,
+    }
 container = image_uris.retrieve(region=aws_region, framework=framework, version=framework_version, image_scope='inference', instance_type=instance_type)
 
 name_without_dots = model_version.replace('.', '-')
@@ -57,11 +69,11 @@ try:
             {
                 "VariantName": "variant1",
                 "ModelName": model_name, 
-                # "InstanceType": instance_type,
-                # "InitialInstanceCount": 1,
+                # "InstanceType": instance_type, # The "instance type" configuration is not applicable for serverless endpoints
+                # "InitialInstanceCount": 1, # The "initial instance count" configuration is not applicable for serverless endpoints
                 "ServerlessConfig": {
-                    "MemorySizeInMB": 1024,
-                    "MaxConcurrency": 10
+                    "MemorySizeInMB": memory_size.get(stage, memory_size['default']),
+                    "MaxConcurrency": max_concurrency.get(stage, max_concurrency['default'])
                 }
             }
         ]
