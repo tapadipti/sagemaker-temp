@@ -56,7 +56,11 @@ try:
                 "VariantName": "variant1",
                 "ModelName": model_name, 
                 "InstanceType": instance_type,
-                "InitialInstanceCount": 1
+                "InitialInstanceCount": 1,
+                "ServerlessConfig": {
+                    "MemorySizeInMB": 1024,
+                    "MaxConcurrency": 10
+                }
             }
         ]
     )
