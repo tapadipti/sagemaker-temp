@@ -57,7 +57,7 @@ jobs:
     - name: "Get model url"
       if: steps.gto.outputs.event == 'assignment'
       run: |
-        echo "MODEL_URL=$(dvc get --show-url --rev ${{ github.sha }} https://github.com/tapadipti/smaker output/myfmmodel.tar.gz)" >> "$GITHUB_ENV"
+        echo "MODEL_URL=$(dvc get --show-url --rev ${{ github.sha }} https://github.com/iterative/sagemaker-temp output/myfmmodel.tar.gz)" >> "$GITHUB_ENV"
 
     - name: "Run deployment python script"
       if: steps.gto.outputs.event == 'assignment'
