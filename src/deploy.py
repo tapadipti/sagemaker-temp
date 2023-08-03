@@ -46,6 +46,8 @@ except Exception as e:
     print("\nEncountered the following error when creating the model: ", e)
     if 'Cannot create already existing model' in str(e):
         print("\nBecause this model already exists, we will reuse it instead of creating a new one.")
+    else:
+        raise
 
 endpoint_config_name = f'td-fm-ep-config-{name_without_dots}-{stage}'
 try:
@@ -66,6 +68,7 @@ try:
     )
 except Exception as e:
     print("\nEncountered the following error when creating the endpoint config: ", e)
+    raise
     
 
 endpoint_name = f'td-fm-ep-{stage}'
@@ -80,3 +83,5 @@ except Exception as e:
         create_endpoint_response = sagemaker_client.update_endpoint(
                                                     EndpointName=endpoint_name, 
                                                     EndpointConfigName=endpoint_config_name)
+    else:
+        raise
