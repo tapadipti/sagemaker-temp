@@ -19,6 +19,7 @@ permissions:
 jobs:
   act:
     name: Parse model action and deploy model if stage was assigned
+    environment: cloud
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
