@@ -5,11 +5,7 @@ import boto3
 from sagemaker import image_uris
 
 # Note: Remember to create these env vars in GitHub: 
-# AWS_ACCESS_KEY_ID
-# AWS_SECRET_ACCESS_KEY
-# AWS_SESSION_TOKEN
-# AWS_ROLE
-# AWS_REGION
+# AWS_SAGEMAKER_ROLE
 
 n = len(sys.argv)
 if n>1:
@@ -23,7 +19,7 @@ else:
 session = boto3.Session()
 aws_region=os.environ["AWS_REGION"]
 sagemaker_client = session.client('sagemaker', region_name=aws_region)
-sagemaker_role= os.environ["AWS_ROLE"]
+sagemaker_role= os.environ["AWS_SAGEMAKER_ROLE"]
 
 # TODO: Create a custom container based on the model instead of this hard-coded one
 framework='tensorflow'
