@@ -28,7 +28,6 @@ jobs:
         aws-region: us-east-1
         role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
         role-duration-seconds: 900
-        role-session-name: DeploySageMakerAWSSession
 
     - name: "Use GTO"
       id: gto
