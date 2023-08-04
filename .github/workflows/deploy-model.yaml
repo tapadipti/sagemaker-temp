@@ -21,6 +21,7 @@ jobs:
     name: Parse model action and deploy model if stage was assigned
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v3
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -28,8 +29,6 @@ jobs:
         role-to-assume: arn:aws:iam::342840881361:role/SandboxUser
         role-duration-seconds: 900
         role-session-name: DeploySageMakerAWSSession
-
-    - uses: actions/checkout@v3
 
     - name: "Use GTO"
       id: gto
