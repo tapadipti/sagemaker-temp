@@ -4,7 +4,9 @@ import boto3, json
 from PIL import Image
 
 app = Flask(__name__)
-sagemaker_runtime_client = boto3.client('runtime.sagemaker')
+aws_region='us-east-1'
+session = boto3.Session()
+sagemaker_runtime_client = session.client('runtime.sagemaker', region_name=aws_region)
 endpoint_name = 'td-fm-ep-dev'
 
 
