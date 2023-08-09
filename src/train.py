@@ -6,13 +6,6 @@ from tensorflow.keras.layers import Dense, Dropout, Conv2D, Flatten, MaxPooling2
 from tensorflow.keras.utils import to_categorical
 from dvclive import Live
 
-# Note: Remember to create these env vars in GitHub: 
-# AWS_ACCESS_KEY_ID
-# AWS_SECRET_ACCESS_KEY
-# AWS_SESSION_TOKEN
-# AWS_ROLE
-# AWS_REGION
-
 OUTPUT_DIR = "output"
 fpath = os.path.join(OUTPUT_DIR, "data.pkl")
 with open(fpath, "rb") as fd:
