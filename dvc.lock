@@ -21,36 +21,36 @@ stages:
       size: 54950285
     - path: src/train.py
       hash: md5
-      md5: 069fef6ee741c6f2f0cbf3a9485625f9
-      size: 3397
+      md5: 4769acacbfd86ab4d1129ada244a5eaf
+      size: 3254
     params:
       params.yaml:
         train.batch_size: 128
-        train.dropout: 0.4
+        train.dropout: 0.45
         train.hidden_units: 64
         train.lr: 0.01
         train.num_epochs: 10
     outs:
     - path: dvclive/metrics.json
       hash: md5
-      md5: 6c135398addb261b8f83600adadd9316
+      md5: eddd2e4d726ea9683919c842eae2d028
       size: 54
     - path: dvclive/plots/metrics/accuracy.tsv
       hash: md5
-      md5: 3d00052a167f2c8fa4f49fc0e5f2a760
-      size: 223
+      md5: da1f44b5d508d323355297f0265a2dfb
+      size: 224
     - path: output/myfmmodel.keras
       hash: md5
-      md5: 203ee6f14efee6139ad318c7ff6f72ed
-      size: 3681312
+      md5: e0d74f03939366b6950814361b0d3439
+      size: 3678612
     - path: output/myfmmodel.tar.gz
       hash: md5
-      md5: c2213ffbcad2fd9aedffa33e2efcf0d4
-      size: 3336332
+      md5: 3f6c23156cc37ecf60ebf8812cd7ffa8
+      size: 3428323
     - path: output/train_logs.csv
       hash: md5
-      md5: 727c76a904b38d5bda976df4c88019bd
-      size: 423
+      md5: 65c77f50e1a7e0c57c9ac391c1a349af
+      size: 425
   evaluate:
     cmd: python src/evaluate.py
     deps:
@@ -60,8 +60,8 @@ stages:
       size: 54950285
     - path: output/myfmmodel.keras
       hash: md5
-      md5: 203ee6f14efee6139ad318c7ff6f72ed
-      size: 3681312
+      md5: e0d74f03939366b6950814361b0d3439
+      size: 3678612
     - path: src/evaluate.py
       hash: md5
       md5: d55658c1947e760905f8784a695033b4
@@ -69,14 +69,14 @@ stages:
     outs:
     - path: output/metrics.json
       hash: md5
-      md5: 7ef92be1be7b231c9368ed38720f33d8
-      size: 59
+      md5: 5e90c05c2a69d785552d4aa157a1b5b8
+      size: 61
     - path: output/predictions.json
       hash: md5
-      md5: 46e2c3c474a54698aa350027ccefb5e0
+      md5: 0252d31cbeed3aae886c033a033d9b62
       size: 310000
     - path: output/test/samples_of_mispredicted_images/
       hash: md5
-      md5: 7f19a312dc3a7fb17c323409fe8c2bb8.dir
-      size: 174415
+      md5: 8708f98722608b6128241e31551b17c6.dir
+      size: 175336
       nfiles: 10
