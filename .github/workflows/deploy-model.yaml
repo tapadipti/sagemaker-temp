@@ -29,6 +29,29 @@ jobs:
     - name: "Use GTO"
       id: gto
       uses: iterative/gto-action@v2
+
+    - name: Parse Git tag
+      run: |
+        echo "Printing now"
+        echo $GITHUB_REF
+
+        result=`python src/parse_tag.py $GITHUB_REF`
+        echo result
+
+        # export NAME=`gto check-ref $GITHUB_REF --name`
+        # export VERSION=`gto check-ref $GITHUB_REF --version`
+        # export EVENT=`gto check-ref $GITHUB_REF --event`
+  
+        # if [ "$EVENT" = "assignment" ]; then
+        #   export STAGE=`gto check-ref $GITHUB_REF --stage`
+        # else
+        #   export STAGE=""
+        # fi
+        
+        echo "event=$(echo ${{ github.event.inputs.event }})" >> "$GITHUB_OUTPUT"
+        echo "version=$(echo ${{ github.event.inputs.version }})" >> "$GITHUB_OUTPUT"
+        echo "name=$(echo ${{ github.event.inputs.name }})" >> "$GITHUB_OUTPUT"
+        echo "stage=$(echo ${{ github.event.inputs.stage }})" >> "$GITHUB_OUTPUT"
     
     - uses: actions/setup-python@v2
 
@@ -63,7 +86,7 @@ jobs:
     - name: "Get model url"
       if: steps.gto.outputs.event == 'assignment'
       run: |
-        echo "MODEL_URL=$(dvc get --show-url --rev ${{ github.sha }} https://github.com/iterative/sagemaker-temp output/myfmmodel.tar.gz)" >> "$GITHUB_ENV"
+        echo "MODEL_URL=$(dvc get --show-url --rev ${{ github.sha }} https://github.com/${{ github.repository }} output/myfmmodel.tar.gz)" >> "$GITHUB_ENV"
 
     - name: "Run deployment python script"
       if: steps.gto.outputs.event == 'assignment'
